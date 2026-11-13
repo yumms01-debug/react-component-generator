@@ -50,18 +50,17 @@ function App() {
       <header className="app-header">
         <div className="brand-mark">RC</div>
         <div className="header-copy">
-          <span className="eyebrow">React Component Generator</span>
-          <h1>프롬프트로 만드는 UI 워크벤치</h1>
-          <p>요청을 입력하고, 생성된 React 컴포넌트를 바로 미리보고 코드로 확인합니다.</p>
+          <h1>컴포넌트 작업실</h1>
+          <p>아이디어를 적고, 작동하는 React 컴포넌트로 만나보세요.</p>
         </div>
         <div className="header-meta" aria-label="현재 작업 상태">
           <div>
-            <span>Provider</span>
+            <span>생성 모델</span>
             <strong>{activeProvider}</strong>
           </div>
           <div>
-            <span>Components</span>
-            <strong>{components.length}</strong>
+            <span>작업 결과</span>
+            <strong>{components.length}개</strong>
           </div>
         </div>
       </header>
@@ -73,11 +72,10 @@ function App() {
 
         <aside className="settings-panel" aria-label="실행 설정">
           <div className="settings-header">
-            <span className="panel-kicker">Runtime</span>
             <h2>실행 설정</h2>
           </div>
           <div className="provider-select">
-            <label htmlFor="provider">Provider</label>
+            <label htmlFor="provider">AI 제공자</label>
             <select
               id="provider"
               value={provider}
@@ -92,7 +90,7 @@ function App() {
           </div>
           <div className="api-key-input">
             <label htmlFor="api-key">
-              API Key
+              API 키
             </label>
             <div className="api-key-field">
               <input
@@ -131,7 +129,6 @@ function App() {
         {components.length > 0 && (
           <div className="results-header">
             <div>
-              <span className="panel-kicker">Generated</span>
               <h2>생성된 컴포넌트</h2>
             </div>
             <button className="btn-clear" onClick={clearAll}>
@@ -155,7 +152,8 @@ function App() {
               </div>
             </div>
             <div className="empty-copy">
-              <h2>새 컴포넌트를 생성해보세요.</h2>
+              <h2>아직 비어 있는 캔버스</h2>
+              <p>필요한 UI를 설명하거나 예시를 골라보세요.<br />생성된 결과를 여기서 실행하고 코드로 가져갈 수 있어요.</p>
             </div>
           </div>
         )}

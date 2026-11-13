@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import { isPromptLengthValid, MAX_PROMPT_LENGTH } from '../utils/validatePromptLength';
 
 interface PromptInputProps {
   onGenerate: (prompt: string) => void;
@@ -16,10 +17,12 @@ const EXAMPLES = [
 
 export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
+  const feedbackId = useId();
+  const isLengthValid = isPromptLengthValid(prompt);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (prompt.trim() && !isLoading) {
+    if (prompt.trim() && !isLoading && isLengthValid) {
       onGenerate(prompt.trim());
     }
   };
@@ -31,8 +34,8 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
   return (
     <div className="prompt-section">
       <div className="prompt-heading">
-        <span className="panel-kicker">Prompt</span>
         <h2>무엇을 만들까요?</h2>
+        <p>컴포넌트의 용도, 필요한 요소, 원하는 분위기를 알려주세요.</p>
       </div>
       <form onSubmit={handleSubmit} className="prompt-form">
         <textarea
@@ -40,6 +43,9 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="예: 고객 목록 테이블 위에 들어갈 검색 필터 바를 만들어줘. 상태, 담당자, 날짜 범위 필터가 필요해."
           className="prompt-textarea"
+          aria-label="프롬프트"
+          aria-invalid={!isLengthValid}
+          aria-describedby={feedbackId}
           rows={3}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
@@ -50,7 +56,7 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
         <button
           type="submit"
           className="btn-generate"
-          disabled={!prompt.trim() || isLoading}
+          disabled={!prompt.trim() || isLoading || !isLengthValid}
         >
           {isLoading ? (
             <span className="loading-spinner">생성 중...</span>
@@ -58,6 +64,14 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
             '컴포넌트 생성'
           )}
         </button>
+        <div id={feedbackId} className="prompt-feedback">
+          <span>{prompt.length} / {MAX_PROMPT_LENGTH}자</span>
+          {!isLengthValid && (
+            <span role="alert" className="prompt-length-error">
+              프롬프트는 {MAX_PROMPT_LENGTH}자 이내로 입력해주세요.
+            </span>
+          )}
+        </div>
       </form>
       <div className="prompt-examples">
         <span className="examples-label">예시 프롬프트</span>
